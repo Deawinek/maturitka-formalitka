@@ -1,5 +1,18 @@
 Maturita Linux
 
+
+•	Nastavit 3 síťové karty
+o	NAT
+o	Vnitřní síť
+o	Síť pouze s hostem
+Jak rozdělit disk
+1.	Vytvořit novou tabulku oddílu
+2.	(Velikost: 75 % disku) Ext4 na /
+3.	(Velikost: 20 % disku) Ext4 na /home
+4.	(Velikost: 500 MB) pro systémová oblast EFI
+5.	(Velikost: zbytek disku) pro Odkládací prostor 
+
+
 1.	Vytvoření admina:
 Mkdir -p /admin/data – vytvoří složku pro uživatele admin
 Useradd -d /admin/data admin– vytvoří uživatele do složky /admin/data se shellem bin/bash
