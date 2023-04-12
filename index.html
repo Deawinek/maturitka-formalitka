@@ -13,7 +13,7 @@
 		<h1>Maturitka Formalitka - PSS</h1>  
 		<div>
 			<h2>Linux</h2>
-			<h3>Apache,MySQL</h3>
+			<h3>Apache</h3>
 			<p>
 				Jako první musíme nainstalovat Apache.
 			</p>
@@ -33,6 +33,23 @@
 			<p>
 				VirtualHost funguje na bázi změnění domény, cesty a vše co se okolo toho týče.
 				Pro změnění složky ze které se ta stránka bude brát půjdeme do složky <code>cd /etc/apache2/sites-available</code> a vytvoříme si vlastní site. <code>sudo cp 000-default.conf *nazev_vasi_stranky*.conf </code>. Zde můžeme změnit 2 duležité věci. Jedna je <code>DocumentRoot</code>. To je složka ze které se berou soubory na stránky. To můžeme změnit na složku, na kterou chceme. Dále můžeme nastavit <code>ServerName</code>. To je věc která nám mění doménu. To si spíš vygooglite co tam máte dát to je docela hard věc a je těžké to vysvětlit.
+
+				Na konci musíte po tom co vytvoříte tu stránku, tak je potřeba tu stránku aktivovat <code>sudo a2ensite *nazev_vasi_stranky*.conf</code>. Dále už stačí jenom udělat restart apache <code>sudo systemctl restart apache2</code>. Tadá máte funkční stránku. Jsem na tebe pyšný frfr no cap
+			</p>
+
+			<h4>Další nastavení</h4>
+			<p>
+				Takže jelikož máte nějaké základní nastavení tak potom už vám stačí jenom googlit a zas tak těžké to nebude 
+			</p>
+			<h3>MySQL</h3>
+			<p>
+				A teď začíná fucking rodeo. Jelikož se mi to nechce psát tak vám sem hodím tu stránku která vám s tím pomůže
+				<a href="https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04">HERE</a>
+			</p>
+			<h3>DHCP</h3>
+			<p> 
+				Tohle není tak těžké jak by dost lidí si myslelo. Už to známe <code>sudo apt install isc-dhcp-server</code>
+				Konfiguráky jsou <code>/etc/dhcpcd</code> a ještě <code>/etc/default/isc-dhcp-server</code>. Ten první obsahuje <code>dhcpcd.conf</code> ve kterém si můžeme nastavit náš DHCP server. V tomto souboru najdeme hodně komentářů a jednoduchý subnet, který začíná <code>subnet *.*.*.* netmask *.*.*.* </code>. Tyto řádky odkomentujeme a nastavíme vlastní IP s netmaskou a nastavíme range. Tento soubor uložíme a napíšeme příkaz <code>ip a</code>. Zde zjistíme jaké máme ethernetové konektory. Najdeme si ten na kterém nám poběží DHCP a zapamatujeme si ho. Nastavíme pro něj statickou IP <code>sudo ip addr add *nase_ip*/*maska* brd + dev *nazev_rozhraní*</code> a následně jenom <code>ip link set *nazev_rozhraní* up</code>. Nyní otevřeme soubor <code>/etc/default/isc-dhcp-server</code> v něm najdeme <code>INTERFACE_V4</code> nebo něco takového a do uvozovek napíšeme naše rozhraní. Vše uložíme a restartujeme <code>sudo systemctl restart isc-dhcp-server</code>. Vše by mělo běžet v pořádku.
 			</p>
 		</div>
   	</body>
