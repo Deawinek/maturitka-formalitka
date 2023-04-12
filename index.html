@@ -1,4 +1,39 @@
 <html>
-  <h1>Maturitka Formalitka - PSS</h1>
-  
+	<head>
+		<title>Maturitka formalitka od Alexe</title>
+		<style type="text/css">
+			code{
+				background: rgba(0, 0, 0, 0.2);
+				padding: 4px;
+				line-height: 28px;
+			}
+		</style>
+  	</head>
+  	<body>
+		<h1>Maturitka Formalitka - PSS</h1>  
+		<div>
+			<h2>Linux</h2>
+			<h3>Apache,MySQL</h3>
+			<p>
+				Jako první musíme nainstalovat Apache.
+			</p>
+			<code>sudo apt install apache2</code>
+			<p>Všechny soubory týkající se Apache se nachází ve složce <code>/etc/apache2</code> a stránky defaultně složka na stránky <code>/var/www</code></p>
+			<p>První věc, kterou je dobré udělat je si vyzkoušet že ten server běží. Když napíšeme do terminálu <code>sudo systemctl status apache2</code> a nebo vytvoříme soubor v <code>/var/www</code> s názvem index.html. Do něj napíšeme třeba <code>test</code> a když půjdeme na <code>localhost:80</code> tak by jsme měli vidět naši stránku s test</p>
+
+			<h4>PHP</h4>
+			<p>
+				Aby jsme zajistili že nám na serveru poběží PHP a ne jenom čisté HTML tak je potřeba nastavit modul pro PHP.
+				
+			</p>
+			<code>sudo apt install php libapache2-mod-php php-common php-cli php-gd php-curl php-mysql<br> sudo systemctl restart apache2 </code>
+			<p>Nyní když přejmenujeme index.html na index.php pomocí <code>mv index.html index.php</code> a napíšeme do index.php <code>&lt;?php echo 'test'; ?&gt;</code> a následně se podíváme na stránku tak by jsme měli znovu vidět test</p>
+
+			<h4>VirtualHost</h4>
+			<p>
+				VirtualHost funguje na bázi změnění domény, cesty a vše co se okolo toho týče.
+				Pro změnění složky ze které se ta stránka bude brát půjdeme do složky <code>cd /etc/apache2/sites-available</code> a vytvoříme si vlastní site. <code>sudo cp 000-default.conf *nazev_vasi_stranky*.conf </code>. Zde můžeme změnit 2 duležité věci. Jedna je <code>DocumentRoot</code>. To je složka ze které se berou soubory na stránky. To můžeme změnit na složku, na kterou chceme. Dále můžeme nastavit <code>ServerName</code>. To je věc která nám mění doménu. To si spíš vygooglite co tam máte dát to je docela hard věc a je těžké to vysvětlit.
+			</p>
+		</div>
+  	</body>
 </html>
