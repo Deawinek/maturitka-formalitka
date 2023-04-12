@@ -1,0 +1,83 @@
+windows server
+vytvoření virtuálu
+•	windows, other windows
+•	minimálně 4gb paměti
+•	velikost disku 40gb, všechno ostatní default
+•	nastavení 
+o	systém
+	aspoň 2 cpu
+	povolit nested vt
+o	obrazovka
+	povolit 3d akceleraci – pro graficky náročný věci
+o	úložiště
+	samozřejmě iso soubor
+o	síť
+	1. nat, 2. vnitřní síť
+instalace ws
+•	verze s desktop experience – je jedno jaká
+•	nainstalovat přídavky pro hosta – prostě to udělej
+konfigurace
+•	adekvátně si pojmenovat sítě – podle mac adresy
+•	nastavení intnetu
+o	tcp/ipv4 - properties
+	ip 192.168.0.x
+	gateway 192.168.0.1
+	dns preffered – stejný jako ip
+	dns alternate – 8.8.8.8
+•	server manager > local server
+o	přejmenovat (computer name)
+o	povolit remote desktop
+•	dashboard > add roles and features
+o	server roles
+	active directory domain services (ad ds)
+	dhcp server
+	dns server
+	web server (iis)
+o	confirmation
+	zaškrtnout restart
+•	dashboard > vlaječka s vykřičníkem
+o	promote this server to domain controller
+	add new forest – nějaký jméno (něco.local)
+	nějakej password pro obnovení
+o	complete dhcp configuration
+	všechno default
+
+•	dashboard > tools > dns
+o	něco.local > add new host (a a aaaa)
+	name www
+	ip address – stejná jako intnet ip
+o	new alias (cname)
+	name web
+	fully qualified domain name www.něco.local
+•	dashboard > tools > dhcp
+o	ipv4 > new scope
+	name mynet
+	start ip address – 192.168.0.10
+	end ip address - 192.168.0.250
+	vyloučení - 192.168.0.100 až 192.168.0.200
+	zapůjčení – 10 minut
+	gateway – stejný jako intnet gateway
+	dns - ip address add – stejná jako intnet ip a 8.8.8.8
+	možná přidat nějakou rezervaci
+disk c:
+o	nová složka home a profiles
+	nasdílet s plnýma právama - sharing > advanced sharing > permissions
+	add > authenticated users – taky plný práva
+o	nová složka webs\www > properties
+	security > přidat uživatele www jen pro čtení
+•	dashboard > tools > ad administrative center (nový gui)
+•	dashboard > tools > ad users and computers (starý gui)
+o	něco.local > new organizational unit > jméno studenti
+	studenti > new group studenti
+•	new user – jméno, heslo, member of atd
+•	profile > profile path \\jméno serveru\profiles\jméno
+•	home folder \\jméno serveru\home\jméno
+o	něco.local > new organizational unit > jméno ucitele
+	ucitele > new group ucitele
+•	stejnej shit jako u studentů
+o	něco.local > new organizational unit > jméno services
+•	new user > www
+
+•	dashboard > tools > internet information services (iis)
+	hej sorry ale tohle jsem vůbec nepobral
+	kdyby někdo chtěl tak to dodělejte lol
