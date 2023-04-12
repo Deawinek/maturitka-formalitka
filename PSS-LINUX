@@ -1,1 +1,141 @@
-asaasdasda
+Maturita Linux
+
+1.	Vytvoření admina:
+Mkdir -p /admin/data – vytvoří složku pro uživatele admin
+Useradd -d /admin/data admin– vytvoří uživatele do složky /admin/data se shellem bin/bash
+
+choSudo nano /etc/passwd – zkontrolujeme, zda se účet vytvořil + přidáme jméno Linux Administator (mezi dvě dvojtečky před /admin/)
+Sudo cp -R /etc/skel /admin/data – zkopírujeme složku skell do /admin
+ll / -> ll /admin -> cd .. -> poté převedeme vlastníka složky data na admina -> chown admin data -> poté odebereme práva rootu -> chmod 700 data 
+Nyní zajistíme aby byl admin Adminem -> nano /etc/group -> k skupinám sudo a adm připíšeme admin
+Nakonec změníme heslo admina (admin123) – passwd admin 
+Pomocí su admin vyzkoušíme zde heslo funguje (pomocí cd ~; pwd zjistím zda jsou složky nastavené správně)
+NYNÍ JE UŽIVATEL ADMIN ADMINEM
+2.	Přidání obyčejného uživatele Alan Delon, který patří do skupiny delon:
+Adduser alan – poté vyplníme pouze heslo (alan123) a jméno Alam Delon
+Groupadd delon -> nano /etc/group -> ke skupině delon přípíšeme alan
+Nano /etc/passwd – zkontrolujeme zda se Alan vytvořil
+Změnení domovské složky /home/alan tak, aby byla vlasntníkem skupina delon a aby skupina delon mohla upravovat, skupina root číst a zbytek nic
+Cd /home -> ll -> chgrp delon alan – změní groupu složky
+Chmod 740 alan -> změní oprávnění 
+Pomocí 0su alan vyzkoušíme zde heslo funguje 
+ 
+3.	Vytvoření souboru test.sh + připsání příkazů do něj 
+Nano test.sh – vytvoří soubor
+Příkazy: 
+Překopírování složky Dokumenty z domovského adresáře do složky tmp v kořenovém adresáři
+→ cp -R ~/Dokumenty /tmp
+Ukončení procesu s id 15658
+→ kill -kill 15658 (nebo kill-p 156580)
+Vytvořte složku Script v domovském adresáři
+→ mkdir ~/Script
+Vytvořte v domovském adresáři soubor test.sh a nastavte jeho oprávnění na spuštění na vlastníka a skupinu 
+→ touch test.sh chmod ug+x test.sh
+Zmente vlastníka souboru test.sh na alan
+→chown alan test.sh
+Výpis všech aktuálně běžících procesů
+→ ps -A
+KONEC PSANÍ PŘÍKAZŮ	
+4.	Pomocí programu cron, nastavte aby se scripr test.sh periodicky prováděl každé pondělí v jednu hodinu
+→ crontab -e (vyberene 1 - nano)
+V nanu zapíšeme 0 1 * * * ~/test.sh
+CRONTAB JE NYNÍ NASTAVEN
+5.	Instaluj programy inkscape a připrav prostředí pro vývoj java aplikací 
+→ sudo apt update – aktualizuje a získá nejnovější programy
+→ sudo apt install inkscape – naistaluje inkscape
+→ sudo snap install --classic intellij-idea-community/education/pro – nainstaluje intellij
+→ sudo apt install openjdk-18-jdk – nainstaluje jdk nutné pro vývoj java aplikací
+Pokud by to mělo být přímo pro JavaFX – otevřeme prohlížeč – liberica bellsoft a nainstalujeme Full JDK pro linux 
+→ po stažení s interntu – terminál – cd Downloads/ nebo Stzažené/
+→ sudo dpkg -i bellsoft…
+
+6.	Nainstalování služeb DHCP a DNS
+Sudo apt install isc-dhcp-server – nainstaluje dhcp server
+       Sudo apt install bind9 – nainstaluje DNS 
+KONFIGURACE DHCP 
+Nakonfigurujte přidělování ip adres vlastního subnetu ip adres pro privátní sítě v rozsahu 50 zařízení + vytvořte rezervaci na fyzického hosta, který se bude jmenovat maturant 
+→ sudo nano /etc/dhcp/dhcpd.conf – odkomentujeme „very basic“ deklaraci subnetu + smažeme option
+Dále pokračujeme v řádku subnet
+→ adresa sítě 192.168.66.0
+→ netmask 255.255.255.192
+→range 168.168.66.1 192.168.66.50
+Rezervace – najdu v konfiguraci host passacaglia a podle toho to udělám
+→ pod range píšu: host maturant {hardware ethernet [zde bude adresa hosta]}
+KONFIGURACE DHCP TÍMTO HOTOVA
+→ nano /etc/default/isc-dhcp-server -> do InterfaceV4 vložíme název vnitřní sítě (zjistíme pomocí ip a – bude to ta nenastavená, pokud ne, tak jí musíme přidat) zajistíme tak, že na této adrese bude naslouchat interface 
+→ nastavení ip pro počítač => ip a a 192.168.66.60/26 dev enp0s8 
+ Je to ip mimo range těch 50 zařízení s maskou 26 – pomocí internetu
+Enp0s8 je vnitřní sít v zařízení 
+Service isc-dhcp-server start 
+Service isc-dhcp-server status
+TÍMTO JE DHCP NASTAVENÉ (pokud se mu teda chce xddddd mrdka nefunkční)
+KONFIGURACE DNS 
+Vytvoř vlastní autoritativní dns s tím že bude spravovat svou vlastní zónu s názvem udělátko.net
+→ cd /etc/bind -> cat named.conf -> cat named.conf.default-zones – vypíše defaulutní zóny 
+→ zónu localhost zkopíruji
+→ vytvoříme konfiguraci pro novou zónu -> sudo nano named.conf.udelatko.net
+→ do vytvořeného souboru vložíme zkopírované info o zóně localhost (musíme localhost změnit na udelatko.net + cíl souboru zmeníme na /etc/bind/udelatko.net)
+→ poté jdeme do nano named.conf -> přidáme další include „/etc/bind/named.conf.udelatko.net“
+→ dále musíme udělat samotný soubor udelatko.net -> ten uděláme vykopírováním souboru db.local který upravíme == sudo cp db.local udelatko.net
+→ nano udelatko.net
+změníme: 
+local loopback interface -> udelatko.net 
+STTL 604800 -> STTL 5h
+Localhost. -> udelatko.net.
+Root.localhost. -> admin.udelatko.net. 
+SERIAL - 2 -> dnešní datum == 2023041001¨
+REFRESH -> 2h
+RETRY -> 30m
+EXPIRE -> 10h
+NEGATIVE CACHE TTL -> 5h
+Localhost. -> udelatko.net.
+127.0.0.1 -> 192.168.66.60 (tu jsme dělali předtím)
+Ipv6 (AAA) smažu
++ přidáme záznamy podle zadání:
+	MX	IN    10	mail.udelatko.net
+mail	IN	A	192.168.66.59
+www	IN	A	192.168.66.58
+web	IN	CNAME	www.udelatko.net
+poté uložíme a vyzkoušíme zda-li dns funguje + resolv
+sudo nano /etc/resolv.conf
+nameserver změníme na 127.0.0.1
+search scmsd.local
+sudo service bind9 restart
+sudo service bind9 status – pokud funguje = ok
+
+u všech služeb funguje 
+system [služba] status
+ 
+7.	Nainstalovat LAMP server a konfigurace Apache2
+Sudo apt install tasksel
+tasksel -> najdeme v UI LAMP server a nainstalujeme ho 
+(pokud ne tak sudo apt install apache2)
+→ cd.. 
+→cd apache2/
+→cd sites-avaible/
+→sudo cp 000-default.conf udelatko.net.conf
+→sudo nano udelatko.net.conf
+Smažeme vše až na SERVERNAME; SERVERADMIN; DOCUMENTROOT; ERRORLOG; CUSTOMLOG
+Úprava :
+ServerName www.udelatko.net
+DocumentRoot /mujweb
+Uložime a zavřeme
+→ sudo mkdir /mujweb
+→ cd /mujweb
+→sudo nano index.html (tam napsat něco buď dle zadání či jen ‚test‘)
+→ sudo a2ensite udelatko.net.conf
+→ systemctl reload apache2
+→sudo nano /etc/hosts -> tam přidáme 127.0.0.1 www.udelatko.net
+Teď ještě oprávnění 
+→cd /etc/apache2/conf-available
+→sudo nano udelatko.conf -> tam napíšeme: 
+<Directory /mujweb>
+    DirectoryIndex index.html
+    Require all granted
+    Allow from All
+</Directory>
+Uložíme a zavřeme
+→sudo a2enconf udelatko
+→systemctl reload apache2
+VŠE HOTOVO <3333333
+
