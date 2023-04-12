@@ -1,1 +1,204 @@
+Struktura dokumentu
+Každý HTML soubor by měl obsahovat několik základních tagů hlavičky a těla. Tím se zaručí, že všichni klienti (zejm. prohlížeče) pochopí, o co v dokumentu vlastně jde.
 
+tag	Význam	Párový	Výskyt
+html	začátek HTML dokumentu	ano	na začátku souboru
+head	hlavička stránky	ano	na začátku souboru
+body	tělo stránky + definice pozadí	ano	za <head>
+<!-- -->	poznámka	ano	kdekoliv 
+!doctype	specifikace DTD	ne	úplně na začátku souboru
+Úprava textu
+Zastaralý způsob úpravy HTML textu se orientuje podle vzhledu, tomu říkám fyzické formátování. Fyzické formátování říká například textu, že bude tučný, namísto aby řekl, že je to důležitý text. Vyznačení smyslu HTML textu je naopak formátování logické.
+
+Fyzické formátování
+tag	Význam	Párový	Používat?
+b	tučné písmo	ano	ano
+i	kurzíva	ano	ano
+u	podtržení textu	ano	ne
+sub	dolní index	ano	ano
+sup	horní index	ano	ano
+small	zmenšení textu	ano	 
+big	zvětšení písma	ano	 
+s	přeškrtnutý text	ano	 ne
+strike	přeškrtnutý text	ano	 
+font	písmo	ano	ne
+basefont	základní font	ne	ne
+blink	blikání písma	ano	ne
+mark	vyznačení v citaci	ano	?
+ruby	anotace nad textem	ano	?
+nobr	nezalamovat obsah	ano	 
+wbr	volitelné rozdělení	ne	klidně
+Logické formátování
+tag	Význam	Párový	Obvyklý vzhled
+span	úsek textu	ano	normální
+strong	zvýraznění (tučně)	ano	tučné
+em	zvýraznění (kurzíva)	ano	kurzíva
+cite	citace	ano	kurzíva
+code	výpis kódu	ano	strojopis
+dfn	nově použitý termín	ano	kurzíva
+kbd	vstup z klávesnice	ano	strojopis
+samp	ukázka	ano	strojopis
+tt	teletype	ano	strojopis
+var	formátování proměnné	ano	kurzíva
+abbr	ustálený výraz	ano	normální
+acronym	zkratka	ano	normální
+del	smazaný obsah	ano	přeškrtnuto
+ins	přidaný text	ano	podtrženo
+q	citace	ano	normální
+Bloky
+Do přehledu bloků jsem kromě blokových prvků zahrnul všechny HTML tagy, které způsobí zalomení řádky (kromě tabulek a seznamů). Tato skupina tagů je tím pádem poněkud umělá, ale HTML tagy <br> a <hr> se mi prostě jinam nevešly.
+
+tag	Význam	Párový
+p	odstavec	nepovinně
+br	řádkový zlom	ne
+div	oddíl	ano
+center	vycentrování	ano
+h1	nadpis 1. úrovně	ano
+h2	nadpis 2 úrovně	ano
+h3	nadpis 3. úrovně	ano
+h4	nadpis 4. úrovně	ano
+h5	nadpis 5. úrovně	ano
+h6	nadpis 6. úrovně	ano
+blockquote	citace, odsazení	ano
+address	adresa	ano
+pre	předformátovaný text	ano
+hr	vodorovná čára	ne
+Další blokové tagy přineslo HTML 5.
+
+tag	Význam	Párový
+header	záhlaví stránky ve smyslu viditelné hlavičky	ano
+footer	patička stránky	ano
+main	hlavní obsah stránky	ano
+article	jeden článek, zejména pro situaci, kdy je na stránce článků víc	ano
+aside	vedlejší obsah	ano
+section	obsahová sekce, například kapitoly článku	ano
+nav	navigace stránky	ano
+figure	obalení obrázku nebo jiného obsahu s jeho souvisejícím obsahem	ano
+figcaption	nadpis tagu figure	ano
+Seznamy
+Říká se tomu také odrážky a číslování. HTML zná také definiční výčty, které se používají velmi málo.
+
+tag	Význam	Párový	Výskyt
+li	položka seznamu	nepovinně	<ul>,<ol> <menu> nebo <dir>
+ol	číslovaný seznam	ano	 
+ul	odrážkový seznam	ano	 
+dir	zvláštní druh seznamu	ano	 
+menu	typ seznamu	ano	 
+dl	seznam definic	ano	 
+dt	definovaný termín	ano	<dl>
+dd	definice termínu	ano	<dl>
+Rozklikávací položky
+Rozklikávání a sbalování funguje i bez javascriptu.
+
+tag	Význam	Párový	Výskyt
+details	sbalený a rozbalitelný obsah	ano	 
+summary	zobrazený nadpis sbaleného obsahu	ano	uvnitř <details>
+Odkazy
+Odkaz se v HTML dělá tagem <a>. Mohly by sem patřit také HTML značky <map> a <area>, které uvádím u klikacích map.
+
+tag	Význam	Párový	Výskyt
+a	odkaz, hyperlink, kotva	ano	kdekoliv kromě <a>
+Příklad: <a href="http://www.seznam.cz">Seznam</a>
+
+Obrázky
+tag	Význam	Párový
+img	obrázek	ne
+picture	kontejner pro obrázek	ano
+Klikací mapy
+Dnes už skoro zapomenutá možnost proměnit různé části obrázku v aktivní oblasti, které se chovají jako odkaz.
+
+tag	Význam	Párový	Výskyt
+map	klikací mapa	ano	 
+area	oblast v klikací mapě	ne	<map>
+Tabulky
+Tabulky jsou v HTML na strukturované zobrazování dat, používají se ale i na celkové rozvržení stránky (což je zastaralé). Podstatné jsou pouze tagy <table>, <tr> a <td>.
+
+tag	Význam	Párový	Výskyt
+table	tabulka	ano	 
+tr	řádek tabulky	nepovinně	<table>, <tbody>, <thead>, <tfoot>
+td	buňka tabulky	nepovinně	<tr>
+th	hlavičková buňka tabulky	nepovinně	<tr>
+caption	hlavička tabulky	ano	<table>
+col	ovlivnění sloupce tabulky	ne	<table>
+colgroup	skupina sloupců tabulky	ne	<table>
+tbody	tělo tabulky	ano	<table>
+thead	hlavička tabulky	ano	<table>
+tfoot	patička tabulky	ano	<table>
+Multimedia
+V HTML5 se konečně urodily tagy, kterými se dá do stránek dobře vkládat audio a video.
+
+Tag	Význam	Párový
+video	obálka navzájem alternativních video souborů	ano
+audio	obálka navzájem alternativních audio souborů	ano
+source	možný zdroj audia, videa nebo obrázku	ne
+track	další stopy, typicky titulky	ne
+Rámy
+Rámy dokážou rozdělit okno prohlížeče na několik obdélníkových částí (rámů) a v každém z nich zobrazit jinou html stránku.
+
+tag	Význam	Párový	Výskyt
+frameset	skupina rámů	ano	za <head>
+frame	rám	ne	<frameset>
+noframes	alternativa rámů	ano	<frameset>
+iframe	vložený rám	ano	 
+Objekty
+Vkládání videí, animací, her, zvuků, reklam a podobných blbostí.
+
+tag	Význam	Párový	Výskyt
+applet	Java aplet	ano	 
+object	objekt	ano	 
+param	parametry objektu	ne	<object>, <applet>
+embed	objekt s plužinou	asi	 
+noembed	alternativa k embed	ano	<embed>
+Formuláře
+HTML dokáže na stránce vykreslit formuláře. Na zpracování vyplněných dat ale HTML žádný nástroj nemá, musejí se použít serverové skripty.
+
+tag	Význam	Párový	Výskyt
+form	formulář	ano	 
+input	vstupní pole	ne	<form>
+select	výběrové pole	ano	<form>
+option	volba	ne	<select>, <datalist>
+textarea	velké vstupní pole	ano	<form>
+label	popis pole	ano	<form>
+fieldset	skupina polí	ano	<form>
+optgroup	skupina voleb	ano	<select>
+legend	popis pole	ano	<fieldset>
+button	tlačítko	ano	<form>
+datalist	data našeptávače	ano	 
+Hlavička
+HTML hlavička (tag <head>) obsahuje tagy, jejichž obsah se na stránce nezobrazí, ale jsou důležité.
+
+tag	Význam	Párový	Výskyt
+title	titulek stránky	ano	<head>
+base	základ odkazů	ne	<head>
+link	nezobrazovaný odkaz	ano	<head>
+meta	informace o dokumentu	ne	<head>
+Skripty a styly
+Skripty myslím zejm. javascript, který umožňuje ve stránkách provádět jednoduché programy. Styly jsou CSS styly, klíčový jazyk pro ovlivnění vzhledu HTML dokumentů.
+
+tag	Význam	Párový	Výskyt
+script	skript, program	ano	kdekoliv
+noscript	alternativa ke skriptu	ano	vně skriptu
+style	zápis CSS stylu	ano	<head>
+template	poznámka, která se parsuje	ano	kdekoli
+Rozšíření
+Sem dávám tagy, které jsou velmi staré nebo velmi nové, takže mají neúplnou podporu.
+
+tag	Význam	Párový	Podpora
+bgsound	zvuk na pozadí	ano	Internet Explorer
+marquee	běžící text	ano	Internet Explorer
+canvas	kreslení javascriptem	ano	všude
+svg	vektorová grafika	ano	všude
+details a summary	skrývatelná oblast	ano	zatím jen Webkit
+Obecné atributy
+Atributy použitelné u skoro každého HTML tagu.
+
+Atribut	Význam	Platnost pro
+class	třída pro CSS selekci	všechny HTML prvky
+id	identifikátor pro CSS a skripty	všechny HTML prvky
+style	zápis CSS stylu	zobrazované prvky
+title	titulek prvku, doplňující info v bublině	všechny HTML prvky
+lang	jazyk prvku	všechny HTML prvky
+name	jméno pro spolupráci s dalšími prvky	různá použitelnost
+accesskey	funkční klávesa	odkazy a formulářová pole
+tabindex	pořadí aktivizace tabulátorem	odkazy a formulářová pole
+události	uživatelské události spouštějící skripty	zobrazované prvky
