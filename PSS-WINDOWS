@@ -1,4 +1,151 @@
-windows server
+Maturita Windows
+Instalace spolu s odkazem bude na konci dokumentu
+
+SERVER MANAGER
+1.	Konfigurace lokálního serveru
+Otevřeme nastavení sítě virtuálu a zjistíme jakou MAC adresu má NAT (stačí 3 poslední znaky)
+Otevřeme nastavení sítě na WS -> Ethernet -> Change adapter options -> vybere sít -> status -> detaily, dokud nenajdeme NAT -> ten přejmenujeme z Ethernet na NAT; vnitřní síť přejmenujeme na intnet; 
+Nyní nastavíme intnet -> Properties (vlastnosti) -> IPv4 -> naklikneme použití IP adresy a vyplníme jí privátní adresou (v tomto případě je to poslední počítač v síti = 192.168.0.254), maska se nastaví automaticky; gateway (je to naopak první počítač v síti = 192.168.0.1)
+IP DNS nastavíme stejně jako adresu stroje – 192.168.0.254; alternativní DNS od googlu = 8.8.8.8
+Tímto je prozatím dokončena konfigurace sítě 
+Nyní se přesuneme do Server Manageru 
+Otevřeme záložku „local server“
+Jako první se ujistíme, že se intnet nastavil, poté změníme jméno počítače a restartujeme; dle zadání můžeme povolit i vzdálené řízení 
+PRVNÍ KROK K NASTAVENÍ LOCAL SERVERU JE TÍMTO HOTOVÝ 
+Dále se vrátíme zpět na Dashboard a vybereme krok číslo 2 (přidání rolí atd.)
+První záložka – nic neměníme 
+Druhá záložka – pokud je zaškrtnutá první možnost, tak nic neměníme 
+Třetí záložka – nic neměníme 
+Čtvrtá záložka – zaškrtneme Active Directory Domain Services, DHCP, DNS, WEB Server
+Pátá záložka – nic neměníme 
+Šestá záložka – nic neměníme 
+Sedmá záložka – nic neměníme 
+Osmá záložka – nic neměníme 
+Devátá záložka – nic neměníme 
+Desátá záložka – nic nepřidáváme
+Jedenáctá záložka – zaškrtneme restart pokud třeba a nainstalujeme 
+Po tom co se objeví text „Instalation suceeded“ můžeme okno zavřít
+1.	Nyní začneme konfiguraci AD DS (Active directory)
+a.	Klikneme na „vlaječku“ s vykřičníkem vpravo nahoře
+b.	-> Promote this server to domain cotroller 
+c.	Add new forest 
+d.	Root domain name -> dle zadání (př. pomoc.local) -> next
+e.	Nic neměníme, jen napíšeme heslo (zřejmě dle zadání) ((Heslo123)) -> next
+f.	DNS options – zatím přeskočíme -> next
+g.	Název NetBIOSu se nastaví sám -> next
+h.	Paths neměníme -> next
+i.	Review options – neměníme -> next
+j.	Prerequisites check – to dokončení loadingu -> install 
+k.	Po dokončení instalace se systém restartuje 
+2.	Klikneme znovu na „vlaječku“ s vykřičníkem vpravo nahoře
+a.	-> complete DHCP configuration
+b.	Description -> next
+c.	Authorization – pokud je první možnost zaškrtlá -> next
+d.	Summary -> close
+e.	Toť vše 
+3.	DNS konfigurace
+a.	Teď klikneme Tools (vedle vlaječky) -> DNS 
+b.	Zkontrolujeme, jestli server běží -> right click na tu druhou odrážku s námi nastaveným jménem -> All Tasks -> pokud je start šedivý, je vše láčes
+c.	Rozklikneme [„pomoc“] -> Forward Lookup Zones -> [„pomoc.local“]
+d.	Pro vytvoření nového záznamu -> right click -> vybereme druh (v našem příbadě Ačkový záznam) -> name: www -> IP: 192.168.0.254 -> add host
+e.	Odklikneme okna -> right click -> CNAME záznam -> Alias name: web -> FQDN: www.pomoc.local -> ok 
+4.	DHCP konfigurace #2
+a.	Tools -> DHCP 
+b.	Naklikneme název naší věci pod textem DHCP -> klikneme Action -> pokud je tam Unauthorize = vše je ok; pokud ne -> Authorize 
+c.	Tvorba nového oboru (scopu) -> IPv4 -> right click -> New Scope -> next -> do Name napíšeme jméno (př. myNet) -> next -> Start IP address – 192.168.0.10; End IP address – 192.168.0.250 (maska se nastaví sama) -> next
+d.	Vyloučení části adres -> Start:192.168.0.100; End: -> 192.168.0.200 -> next
+e.	Lease duration – dle zadání nebo třeba jen 10minut -> next
+f.	Pokud yes -> next 
+g.	Nastavíme gateway (!!GATEWAY SE MUSÍ SCHODOVAT S TÍM KTERÝ JSME JIŽ NASTAVILI!!) -> 192.168.0.1 -> add -> next
+h.	Přidání DNS -> IP adress (také už nastavená): 192.168.0.254; popřípadě i dns googlu(8.8.8.8) -> next
+i.	WIN servery – nemáme -> next 
+j.	Activate scope -> pokud yes -> next
+k.	-> finish 
+l.	Rezervace se udělá kliknutím na -> Reservations -> right click -> new reservation -> potřebujeme vědět MAC adresu toho koho rezervujeme; název: dle zadání; IP: 192.168.0.9 (například) -> add
+m.	Tímto je DHCP nakonfigurováno
+5.	Konfigurace Active Directory
+a.	Tools -> Active Directory Administrative Center nebo Active Directory users and computers
+Konfigurace pomocí ADMINISTRATIVE CENTER
+a.	Po levé straně rozklikneme naší skupinu [„pomoc.local“]
+b.	Right click do prázdného místa -> new -> organization unit -> vyplníme jméno dle zadání -> ok 
+c.	Rightclick na námi vytvořenou org. Jednotku -> new -> group
+d.	Vyplníme jméno dle zadání [„ucitele“] -> ok
+e.	Right click na skupinu [„studenti“] -> new -> user
+f.	Vyplníme jméno a příjmení dle zadání [„Jan Novak“]; logon [„novak“]; heslo[„Hovnokleslo“]; email; atd…
+g.	Můžeme zde nastavit expiraci účtu; expiraci hesla; změnu hesla po přihlášení 
+h.	Scrollneme trochu dolů na MEMBER OF -> add -> napíšeme skupinu -> ok 
+i.	Scrollneme ještě dolů na Profile -> v průzkumníku vytvoříme složky Home a Profiles -> right click na složku -> properties -> sharing -> advanced sharing -> share this folder -> permissions -> ( add -> Authenticated user -> remove Everyone ) -> full -> apply -> ok 
+j.	Right click na složku -> properties -> security -> zde nastavíme permice dle zadání
+k.	Vrátíme se zpět do AC -> profile path -> [„\\servername\profiles\novak“]
+l.	Zaškrtneme Connect -> vybereme písmenko -> to: [„\\servername\home\novak“] 
+m.	-> OK
+n.	-> překlik do USERS AND COMPUTERS -> najdeme uživatele -> rozklikneme ho -> profile -> napíšeme něco za cestu a smažeme (aby bylo možné kliknout apply) a v home se vytvoří složka novak
+o.	Right click na novaka -> scroll k Member of -> zkontrolujeme zda je ve správných skupinách
+p.	DONE
+
+Konfigurace pomocí USERS AND COMPUTERS
+a.	Rozrollujeme naší skupinu [„pomoc.local“]
+b.	Vytvoření organizační jednotky -> right click na pomoc.local -> new -> Organization unit -> napíšeme jméno dle zadání -> ok
+c.	Rozklikneme vytvořenou org. Jednotku -> right click do prostoru -> new -> group
+d.	Vyplníme jméno dle zadání [„studenti“] -> ok (Názvy se schodovat NEMUSÍ)
+e.	Vytvoření usera 
+f.	Rozklikneme skupinu dle zadaní [„ucitele“] -> v horni liste klikneme na samotného panacka 
+g.	vyplníme ->  jmeno; prijmeni; logon -> next -> vyplníme heslo -> nastavíme ‚permice‘ -> finish 
+h.	right click na Josefa -> add to group -> napíšeme nazev [„Domain admins; ucitele“]-> check names -> ok 
+i.	vytvoříme novou org. jednotku -> right click na [„pomoc.local“] -> new -> organization unit -> name -> services
+j.	right click -> new -> user -> name; logon [„www“] -> password -> finish
+
+6.	Konfigurace Internet Informations Services  
+a.	Tools -> Internet Informations Services -> rozrolujeme nabídky 
+b.	Right click na sites -> add new website -> vyplníme name: [„www“] -> physical path: -> klikneme na 3 tečky a vytvoříme novou složku [„webs“] a podsložku [„www“] -> do podsložky vytvoříme txt file [„index.html“] -> <h1> TEST </h1>
+c.	Průzkumník -> webs -> www -> properties -> security -> edit -> add -> přidáme uživatel www -> a nastavíme pouze pro čtení -> apply -> ok 
+d.	Zpět do Add website -> Connect as -> Specific user -> set -> user name: [„jméno domény\www“]; password [„Heslo123“] -> ok -> ok -> test setting (kontrola funkčnosti)
+e.	Host name: např. www.test.local -> ok
+f.	Otevřeme powershell a vyzkoušíme zdali stránka funguje (ping www.test.local); potom můžeme provést kontrolu i v Exploreru 
+g.	Žádost o certifikát na webovky
+h.	-> rozklikneme server [„POMOC0\Administrator“] -> server certificates -> vpravo create request 
+i.	Name: [„www.test.local“]; orgaization: SCMSD Humpolec; Org. unit: [„test“]; City: Humpolec; Province: Vysocina; Country: CZ
+j.	-> next -> bit lenght: dle zadání ig (4096)-> next -> folder -> na C: uděláme složku Cert - > do ní txt file -> crs_www_test_local -> potvrdíme a dáme finish 
+k.	Vytvoření self-signed certifikátu 
+l.	-> v pravo -> create self-signed certifiate -> Personal změníme na Web hosting -> specify [„www.test.local“]
+m.	Zabezpečení webu 
+n.	-> rozklikneme daný web -> vpravo -> bindings -> add -> použijeme https -> v nabídce vybereme certifikát -> host name: [„www.test.local“] -> ok
+o.	-> HSTS -> enable -> zaškrtneme všechno -> max age: 315 360 000 (deset let)
+
+Ten úkol z hodiny. 
+A)
+	1.	Správa serveru 
+	2.	Nástroje - správa zásad skupiny 
+	3.	Doména - nový objekt zásad skupiny
+	4.	Upravit gpo co jsme vytvořili 
+	5.	Konfigurace uživatele - předvolby - zástupci - nová položka - vytvořit zástupce
+	6.	Akce: nahradit 
+	7.	Název: dohoda
+	8.	Typ cíle: objekt systému souborů 
+	9.	Umístění: plocha 
+	10.	Cesta k cíli: \\server\slozka
+	11.	Vytvořit 
+
+	12.	Dohoda - vlastnosti 
+	13.	Cílení - nová položka - skupina //nová položka - uživatel - jméno (pokud je tam skupina a uživatel, tak se bude cítit pouze na toho uživatele v skupině) -> možnosti položky -> nebo (tím zajistíme že to bude jak pro uživatele, tak pro skupinu) 
+	14.	Skupina studenti - ok
+B)
+	15.	Konfigurace uživatele - mapování jednotek - akce: nahradit 
+	16.	Umístění: \\wserver\sohoda 
+	17.	Označit jako: Dohoda 
+	18.	Použít M
+	19.	Společné - cílení - organizační jednotka - admins
+C)
+	1.	Konfigurace počítače - zásady - nastavení systému windows - nastavení zabezpečení - zásady účtů - zásady hesel! 
+	2.	 Zásady - maximální stáří hesla - nastavím dle zadání 
+	3.	Minimální délka - 12 
+	4.	Minimální stáří - 0 
+	5.	Vynutit použití historie hesel - 3 hesla 
+	6.	Zásady uzamčení účtu - Prahová hodnota pro uzamčení - 3 pokusy 
+	7.	Doba uzamčení účtu - 30min; pokud 0, tak by musel odblokovat správce
+
+
+
 vytvoření virtuálu
 •	windows, other windows
 •	minimálně 4gb paměti
@@ -16,68 +163,10 @@ o	síť
 instalace ws
 •	verze s desktop experience – je jedno jaká
 •	nainstalovat přídavky pro hosta – prostě to udělej
-konfigurace
-•	adekvátně si pojmenovat sítě – podle mac adresy
-•	nastavení intnetu
-o	tcp/ipv4 - properties
-	ip 192.168.0.x
-	gateway 192.168.0.1
-	dns preffered – stejný jako ip
-	dns alternate – 8.8.8.8
-•	server manager > local server
-o	přejmenovat (computer name)
-o	povolit remote desktop
-•	dashboard > add roles and features
-o	server roles
-	active directory domain services (ad ds)
-	dhcp server
-	dns server
-	web server (iis)
-o	confirmation
-	zaškrtnout restart
-•	dashboard > vlaječka s vykřičníkem
-o	promote this server to domain controller
-	add new forest – nějaký jméno (něco.local)
-	nějakej password pro obnovení
-o	complete dhcp configuration
-	všechno default
 
-•	dashboard > tools > dns
-o	něco.local > add new host (a a aaaa)
-	name www
-	ip address – stejná jako intnet ip
-o	new alias (cname)
-	name web
-	fully qualified domain name www.něco.local
-•	dashboard > tools > dhcp
-o	ipv4 > new scope
-	name mynet
-	start ip address – 192.168.0.10
-	end ip address - 192.168.0.250
-	vyloučení - 192.168.0.100 až 192.168.0.200
-	zapůjčení – 10 minut
-	gateway – stejný jako intnet gateway
-	dns - ip address add – stejná jako intnet ip a 8.8.8.8
-	možná přidat nějakou rezervaci
-disk c:
-o	nová složka home a profiles
-	nasdílet s plnýma právama - sharing > advanced sharing > permissions
-	add > authenticated users – taky plný práva
-o	nová složka webs\www > properties
-	security > přidat uživatele www jen pro čtení
-•	dashboard > tools > ad administrative center (nový gui)
-•	dashboard > tools > ad users and computers (starý gui)
-o	něco.local > new organizational unit > jméno studenti
-	studenti > new group studenti
-•	new user – jméno, heslo, member of atd
-•	profile > profile path \\jméno serveru\profiles\jméno
-•	home folder \\jméno serveru\home\jméno
-o	něco.local > new organizational unit > jméno ucitele
-	ucitele > new group ucitele
-•	stejnej shit jako u studentů
-o	něco.local > new organizational unit > jméno services
-•	new user > www
 
-•	dashboard > tools > internet information services (iis)
-	hej sorry ale tohle jsem vůbec nepobral
-	kdyby někdo chtěl tak to dodělejte lol
+ODKAZ NA INSTALACI
+https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2019?filetype=ISO
+
+       
+
